@@ -18,7 +18,7 @@ function usage () {
 	if [ -n "$1" ] ; then
 		echo $1 >&2
 	else
-		echo "Start as docker run -h \$FQDN_HOSTNAME -e PASSWORD=\$THE_ADMIN_PASSWORD image" >&2
+		echo "Start as docker run -h \$FQDN_HOSTNAME -e PASSWORD=\$THE_ADMIN_PASSWORD -v /path:/data:Z:rw image" >&2
 	fi
 	exit 1
 }
@@ -42,8 +42,8 @@ fi
 if [ -f /etc/ipa/ca.crt ] ; then
 	echo "FreeIPA server is already configured, starting the services."
 	if [ "$CAN_EDIT_RESOLV_CONF" == "1" ] ; then
-		if [ -f /etc/resolv.conf.ipa ] ; then
-			perl -pe 's/^(nameserver).*/$1 127.0.0.1/' /etc/resolv.conf.ipa > /etc/resolv.conf
+		if [ -f /data/etc/resolv.conf.ipa ] ; then
+			perl -pe 's/^(nameserver).*/$1 127.0.0.1/' /data/etc/resolv.conf.ipa > /etc/resolv.conf
 		fi
 	fi
 	systemctl start-enabled
@@ -60,6 +60,15 @@ if [ -f /etc/ipa/ca.crt ] ; then
 	kdestroy -A
 	echo "FreeIPA server started."
 else
+	( cd /data-template && tar cf - . ) | ( cd /data && tar xf - )
+	(
+		cd /data
+		grep '/$' /etc/volume-data-list | sed 's!^!.!' | xargs mkdir -p
+		grep -v '/$' /etc/volume-data-list | xargs dirname | sed 's!^!.!' | xargs mkdir -p
+		grep -v '/$' /etc/volume-data-list | sed 's!^!.!' | xargs touch
+	)
+	xargs rm -f < /etc/volume-data-mv-list
+
 	HOSTNAME_FQDN=$( hostname -f )
 	HOSTNAME_SHORT=${HOSTNAME_FQDN%%.*}
 	DOMAIN=${HOSTNAME_FQDN#*.}
@@ -92,7 +101,12 @@ else
 	fi
 
 	if /usr/sbin/ipa-server-install -r $REALM -p $PASSWORD -a $PASSWORD -U $DEBUG_OPT --setup-dns $FORWARDER < /dev/null ; then
-		cp -f /etc/resolv.conf /etc/resolv.conf.ipa
+		cp -f /etc/resolv.conf /data/etc/resolv.conf.ipa
+		cat /etc/volume-data-mv-list | while read i ; do
+			rm -rf /data$i
+			mv $i /data$i
+			ln -sf /data$i $i
+		done
 		echo "FreeIPA server configured."
 	else
 		ret=$?
