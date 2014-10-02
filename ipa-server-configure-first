@@ -40,6 +40,10 @@ if echo '# test access' >> /etc/resolv.conf || umount /etc/resolv.conf 2> /dev/n
 fi
 
 if [ -f /etc/ipa/ca.crt ] ; then
+	if ! diff /data/volume-version /etc/volume-version ; then
+		echo "The /data volume was created using incompatible image."
+		exit 2
+	fi
 	echo "FreeIPA server is already configured, starting the services."
 	if [ "$CAN_EDIT_RESOLV_CONF" == "1" ] ; then
 		if [ -f /data/etc/resolv.conf.ipa ] ; then
@@ -107,6 +111,7 @@ else
 			mv $i /data$i
 			ln -sf /data$i $i
 		done
+		cp /etc/volume-version /data/volume-version
 		echo "FreeIPA server configured."
 	else
 		ret=$?
