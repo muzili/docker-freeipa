@@ -42,7 +42,7 @@
 /var/lib/sss/db/
 /var/lib/sss/mc/
 /var/lib/sss/pipes/
-/var/lib/sss/pubconf/krb5.include.d/
+/var/lib/sss/pubconf/
 /var/log/
 /var/named/data/
 /var/named/dyndb-ldap/
