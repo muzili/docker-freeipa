@@ -110,6 +110,7 @@ else
 			cat /data/ipa-server-install-options
 		fi
 		) | xargs /usr/sbin/ipa-server-install -r $REALM -U --setup-dns $FORWARDER ; then
+		sed -i 's/default_ccache_name/# default_ccache_name/' /data/etc/krb5.conf
 		cp -f /etc/resolv.conf /data/etc/resolv.conf.ipa
 		cat /etc/volume-data-mv-list | while read i ; do
 			rm -rf /data$i
