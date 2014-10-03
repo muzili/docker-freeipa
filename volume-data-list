@@ -16,7 +16,7 @@
 /etc/pki/pki-tomcat/
 /etc/sssd/
 /etc/sysconfig/
-/etc/systemctl-lite/enabled/
+/etc/systemctl-lite-enabled/
 /etc/systemd/system/
 /etc/tmpfiles.d/
 /root/ca-agent.p12
