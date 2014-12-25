@@ -40,7 +40,7 @@ if (-e $socket_path) {
 	unlink $socket_path;
 }
 
-my $service_data = `/bin/systemctl show $service 2>&1`;
+my $service_data = `/scripts/systemctl show $service 2>&1`;
 if ($?) {
 	die "Failed to find service [$service]:\n$service_data";
 }
@@ -60,7 +60,7 @@ while (1) {
 	if ($pid == 0) {
 		*STDIN = $connection;
 		*STDOUT = $connection;
-		exec '/bin/systemctl', 'start', $service;
+		exec '/scripts/systemctl', 'start', $service;
 		die "exec should have never reached here\n";
 	}
 }

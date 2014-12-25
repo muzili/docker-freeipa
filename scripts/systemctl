@@ -435,7 +435,7 @@ sub add_runuser {
 		if (defined $data->{'Service.Group'}) {
 			unshift @$cmd, '-g', $data->{'Service.Group'};
 		}
-		unshift @$cmd, '/usr/sbin/runuser-pp';
+		unshift @$cmd, '/scripts/runuser-pp';
 	}
 }
 
@@ -515,7 +515,7 @@ if ($COMMAND eq 'start') {
 		my $service = $SERVICE;
 		if (defined $data->{'Socket.Accept'} and $data->{'Socket.Accept'} eq 'true') {
 			$service =~ s/\.socket$/\@.service/;
-			@paths = ( '/bin/systemctl-socket-daemon', $data->{'Socket.ListenStream'}, $data->{'Socket.SocketMode'} // '0666', $service );
+			@paths = ( '/scripts/systemctl-socket-daemon', $data->{'Socket.ListenStream'}, $data->{'Socket.SocketMode'} // '0666', $service );
 		} else {
 			$service =~ s/\.socket$/\.service/;
 			my $ret = system "$0 is-active $service > /dev/null";
