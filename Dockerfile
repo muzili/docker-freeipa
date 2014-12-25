@@ -1,7 +1,7 @@
 # Clone from the CentOS 7
 FROM centos:centos7
 
-MAINTAINER Jan Pazdziora
+MAINTAINER Joshua Lee <muzili@gmail.com>
 
 RUN yum swap -y -- remove fakesystemd -- install systemd systemd-libs && yum clean all
 
@@ -14,7 +14,9 @@ ADD /scripts/dbus.service /etc/systemd/system/dbus.service
 RUN ln -sf dbus.service /etc/systemd/system/messagebus.service
 
 ADD scripts /scripts
-RUN chmod -v +x /scripts/systemctl /scripts/systemctl-socket-daemon /scripts/start.sh /scripts/runuser-pp
+RUN chmod -v +x /scripts/systemctl /scripts/systemctl-socket-daemon \
+    /scripts/start.sh /scripts/runuser-pp && \
+    touch /firstrun
 
 EXPOSE 53/udp 53 80 443 389 636 88 464 88/udp 464/udp 123/udp 7389 9443 9444 9445
 
