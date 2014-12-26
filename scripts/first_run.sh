@@ -30,7 +30,7 @@ pre_start_action() {
 	find /usr -name bindinstance.py | xargs sed -i '/changing resolv.conf to point to ourselves/s/^/#/'
     fi
 
-    if /usr/sbin/ipa-server-install -r $REALM -p $PASSWORD -a $PASSWORD -U $DEBUG_OPT --setup-dns $FORWARDER < /dev/null ; then
+    if /usr/sbin/ipa-server-install -U -r $REALM -p $PASSWORD -a $PASSWORD $DEBUG_OPT --setup-dns $FORWARDER < /dev/null ; then
 	sed -i 's/default_ccache_name/# default_ccache_name/' /etc/krb5.conf
 	cp -f /etc/resolv.conf /etc/resolv.conf.ipa
 	echo "FreeIPA server configured."

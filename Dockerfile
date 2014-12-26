@@ -1,21 +1,10 @@
 # Clone from the CentOS 7
-FROM centos:centos7
+FROM muzili:systemd
 MAINTAINER Joshua Lee <muzili@gmail.com>
 ENV container docker
-RUN curl -o /etc/yum.repos.d/mkosek-freeipa-epel-7.repo https://copr.fedoraproject.org/coprs/mkosek/freeipa/repo/epel-7/mkosek-freeipa-epel-7.repo; \
-    yum -y install deltarpm; \
+RUN yum -y install deltarpm; \
     yum -y update; \
-    yum swap -y -- remove fakesystemd -- install systemd systemd-libs; \
-    (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-    rm -f /lib/systemd/system/multi-user.target.wants/*;\
-    rm -f /etc/systemd/system/*.wants/*;\
-    rm -f /lib/systemd/system/local-fs.target.wants/*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*;\
-    rm -f /lib/systemd/system/anaconda.target.wants/*;\
-    mkdir -p /run/lock ; \
-    yum install -y freeipa-server bind bind-dyndb-ldap perl; \
+    yum install -y freeipa-server bind bind-dyndb-ldap; \
     yum clean all
 
 ADD scripts /scripts

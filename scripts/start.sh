@@ -13,11 +13,6 @@ function usage () {
 	exit 1
 }
 
-function stop_running () {
-	/scripts/systemctl stop-running
-}
-trap stop_running TERM
-
 systemd-tmpfiles --remove --create 2>&1 | grep -v 'Failed to replace specifiers' || :
 
 rm -f /var/run/*.pid /run/systemctl-lite-running/*
