@@ -1,0 +1,6 @@
+freeipa:
+  image: muzili/freeipa:latest
+  environment:
+    PASSWORD: lrbcnUAcerzEo
+    VIRTUAL_HOST: ipa.example.com
+  hostname:     ipa.example.com
