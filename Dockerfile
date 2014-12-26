@@ -1,5 +1,5 @@
 # Clone from the CentOS 7
-FROM muzili:systemd
+FROM muzili/systemd
 MAINTAINER Joshua Lee <muzili@gmail.com>
 ENV container docker
 RUN yum -y install deltarpm; \
