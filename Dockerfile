@@ -19,11 +19,7 @@ RUN curl -o /etc/yum.repos.d/mkosek-freeipa-epel-7.repo https://copr.fedoraproje
     yum clean all
 
 ADD scripts /scripts
-ADD /scripts/dbus.service /etc/systemd/system/dbus.service
-RUN chmod -v +x /scripts/systemctl /scripts/systemctl-socket-daemon \
-    /scripts/start.sh /scripts/runuser-pp && \
-    ln -sf dbus.service /etc/systemd/system/messagebus.service && \
-    ln -sf /scripts/systemctl /bin/systemctl && \
+RUN chmod -v +x /scripts/start.sh && \
     touch /firstrun
 
 EXPOSE 53/udp 53 80 443 389 636 88 464 88/udp 464/udp 123/udp 7389 9443 9444 9445
