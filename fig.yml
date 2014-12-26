@@ -1,6 +1,9 @@
 freeipa:
+  privileged: true
   image: muzili/freeipa:latest
   environment:
     PASSWORD: lrbcnUAcerzEo
     VIRTUAL_HOST: ipa.example.com
+  volumes:
+    - /sys/fs/cgroup:/sys/fs/cgroup:ro
   hostname:     ipa.example.com

@@ -41,11 +41,5 @@ post_start_action
 
 # Start MariaDB
 echo "Starting freeipa..."
-if perl -e '( -t ) ? exit 0 : exit 1' ; then
-	echo 'Starting interactive shell.'
-	/bin/bash
-else
-	echo 'Go loop.'
-	while true ; do sleep 1000 ; done
-fi
+exec /usr/sbin/init
 
