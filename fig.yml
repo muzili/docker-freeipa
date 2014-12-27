@@ -1,6 +1,6 @@
 freeipa:
+  build: .
   privileged: true
-  image: muzili/freeipa:latest
   environment:
     PASSWORD: lrbcnUAcerzEo
     VIRTUAL_HOST: ipa.example.com

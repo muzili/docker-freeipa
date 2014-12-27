@@ -1,65 +1,18 @@
-# FreeIPA server in Docker
+# 1st configuration(Build by your own)
+```
+fig up
+docker exec -it <your container id> /scripts/start.sh
+```
 
-This repository contains the Dockerfile and associated assets for
-building a FreeIPA server Docker image from the official yum repo.
+# 1st configration(Use the image)
+```
+docker run -d  -h ipa.example.com -e PASSWORD=lrbcnUAcerzEo -e VIRTUAL_HOST=ipa.example.com --privileged=true -v /sys/fs/cgroup:/sys/fs/cgroup:ro muzili/freeipa
+docker exec -it <your container id> /scripts/start.sh
+```
 
-Install docker 1.2+:
+# 2nd
+```
+docker stop <your container id>
+docker start <your container id>
+```
 
-    yum install -y docker-io	# on Fedoras
-    yum install -y docker	# on RHEL 7
-
-Start the service:
-
-    systemctl start docker
-
-To build the image, run in the root of the repository:
-
-    docker build -t freeipa-server .
-
-To run the container:
-
-    docker run --name freeipa-server-container -ti -h ipa.example.test -e PASSWORD=Secret123 freeipa-server
-
-The option `--name` assigns the container a name that can be used
-later with `docker start`, `docker stop` and other commands.
-Command `ipa-server-install` is invoked non-interactively the first
-the container is run, and the `PASSWORD` environment variable
-specifies the admin password.
-
-The `-ti` parameters are optional and are used for get a terminal
-(useful for experimenting in the container).
-
-The container can the be started and stopped:
-
-    docker stop freeipa-server-container
-    docker start -ai freeipa-server-container
-
-
-# IPA-enrolled client in Docker
-
-Checkout the `fedora-20-client`, `fedora-rawhide-client`, or
-`rhel-7-client` branch, according to your needs.  In the root of the
-repository, run:
-
-    docker build -t freeipa-client .
-
-To run the client, link it to the freeipa-server container:
-
-    docker run --privileged --link freeipa-server-container:ipa -e PASSWORD=Secret123 -ti freeipa-client
-
-The first time this container runs, it invokes `ipa-client-install`
-with the given admin password.
-
-# Copyright 2014 Jan Pazdziora
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.

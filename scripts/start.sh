@@ -34,7 +34,3 @@ pre_start_action
 
 post_start_action
 
-# Start MariaDB
-echo "Starting freeipa..."
-exec /usr/sbin/init
-
